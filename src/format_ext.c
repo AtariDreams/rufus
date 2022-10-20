@@ -239,10 +239,10 @@ BOOL FormatExtFs(DWORD DriveIndex, uint64_t PartitionOffset, DWORD BlockSize, LP
 
 	BOOL ret = FALSE;
 	char* volume_name = NULL;
-	int i, count;
+	int i;
+	unsigned int count;
 	struct ext2_super_block features = { 0 };
 	io_manager manager = nt_io_manager;
-	blk_t journal_size;
 	blk64_t size = 0, cur;
 	ext2_filsys ext2fs = NULL;
 	errcode_t r;
@@ -438,6 +438,7 @@ BOOL FormatExtFs(DWORD DriveIndex, uint64_t PartitionOffset, DWORD BlockSize, LP
 	}
 
 	if (FSName[3] != '2') {
+		blk_t journal_size;
 		// Create the journal
 		ext2_percent_start = 0.5f;
 		journal_size = ext2fs_default_journal_size(ext2fs_blocks_count(ext2fs->super));

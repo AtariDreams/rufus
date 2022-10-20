@@ -1062,7 +1062,7 @@ BOOL SetDOSLocale(const char* path, BOOL bFreeDOS)
 	fprintf(fd, "GOTO %%CONFIG%%\n");
 	fprintf(fd, ":1\n");
 	fprintf(fd, "mode con codepage prepare=((%d) \\locale\\%s) > NUL\n", (int)cp, egadrv);
-	fprintf(fd, "mode con codepage select=%d > NUL\n", (int)cp);
+	fprintf(fd, "mode con codepage select=%lu > NUL\n", (unsigned long)cp);
 	fprintf(fd, "keyb %s,,\\locale\\%s\n", kb, kbdrv_data[kbdrv].name);
 	fprintf(fd, ":2\n");
 	fclose(fd);

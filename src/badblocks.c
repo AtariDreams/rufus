@@ -70,7 +70,6 @@ static errcode_t make_u64_list(int size, int num, uint64_t *list, bb_u64_list *r
 	bb->list = malloc(sizeof(blk64_t) * bb->size);
 	if (bb->list == NULL) {
 		free(bb);
-		bb = NULL;
 		return BB_ET_NO_MEMORY;
 	}
 	if (list)
@@ -287,7 +286,7 @@ static int bb_output (blk64_t bad, enum error_types error_type)
 }
 
 static float calc_percent(unsigned long current, unsigned long total) {
-	float percent = 0.0;
+	float percent = 0.0f;
 	if (total <= 0)
 		return percent;
 	if (current >= total) {
@@ -337,7 +336,7 @@ static void pattern_fill(unsigned char *buffer, unsigned int pattern,
 		srand((unsigned int)GetTickCount64());
 		for (ptr = buffer; ptr < buffer + n; ptr++) {
 			// coverity[dont_call]
-			(*ptr) = rand() % (1 << (8 * sizeof(char)));
+			(*ptr) = rand() % (1 << (8 * sizeof(unsigned char)));
 		}
 	} else {
 		PrintInfo(3500, MSG_237, pattern);

@@ -135,7 +135,7 @@ BOOL CyclePort(int index)
 {
 	static uint64_t LastReset = 0;
 	BOOL r = FALSE;
-	HANDLE handle = INVALID_HANDLE_VALUE;
+	HANDLE handle;
 	DWORD size;
 	USB_CYCLE_PORT_PARAMS cycle_port;
 
@@ -186,7 +186,8 @@ int CycleDevice(int index)
 {
 	BOOL found = FALSE, disabled = FALSE;
 	char device_instance_id[MAX_PATH];
-	DWORD i, size, ret = ERROR_DEV_NOT_EXIST;
+	DWORD i, size;
+	LONG ret = ERROR_DEV_NOT_EXIST;
 	LONG dev_status, problem_code;
 	HDEVINFO dev_info;
 	SP_DEVINFO_DATA dev_info_data;
@@ -663,7 +664,7 @@ BOOL GetDevices(DWORD devnum)
 		props.is_VHD = SetupDiGetDeviceRegistryPropertyA(dev_info, &dev_info_data, SPDRP_HARDWAREID,
 			&data_type, (LPBYTE)buffer, sizeof(buffer), &size) && IsVHD(buffer);
 		// Additional detection for SCSI card readers
-		if ((!props.is_CARD) && (safe_strnicmp(buffer, scsi_disk_prefix, sizeof(scsi_disk_prefix)-1) == 0)) {
+		if ((!props.is_CARD) && (safe_strnicmp(buffer, scsi_disk_prefix, strlen(scsi_disk_prefix)-1) == 0)) {
 			for (j = 0; j < ARRAYSIZE(scsi_card_name); j++) {
 				static_strcpy(scsi_card_name_copy, scsi_card_name[j]);
 				if (safe_strstr(buffer, scsi_card_name_copy) != NULL) {

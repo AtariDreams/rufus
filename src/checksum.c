@@ -827,7 +827,7 @@ static void sha256_final(SUM_CONTEXT *ctx)
 /* Finalize the computation and write the digest in ctx->state[] (SHA-256) */
 static void sha512_final(SUM_CONTEXT* ctx)
 {
-	size_t pos = ((size_t)ctx->bytecount) & (SHA512_BLOCKSIZE - 1);
+	size_t pos = ctx->bytecount & (SHA512_BLOCKSIZE - 1);
 	/* 16 EB ought to be enough for everybody... */
 	uint64_t bitcount_lo = ctx->bytecount << 3;
 	uint64_t bitcount_hi = ctx->bytecount >> (64 - 3);
@@ -884,7 +884,7 @@ static void sha512_final(SUM_CONTEXT* ctx)
 /* Finalize the computation and write the digest in ctx->state[] (MD5) */
 static void md5_final(SUM_CONTEXT *ctx)
 {
-	size_t count = ((size_t)ctx->bytecount) & (MD5_BLOCKSIZE - 1);
+	size_t count = ctx->bytecount & (MD5_BLOCKSIZE - 1);
 	uint64_t bitcount = ctx->bytecount << 3;
 	uint8_t *p;
 
@@ -1258,7 +1258,7 @@ out:
  */
 BOOL IsBufferInDB(const unsigned char* buf, const size_t len)
 {
-	int i;
+	size_t i;
 	uint8_t sum[32];
 	if (!HashBuffer(CHECKSUM_SHA256, buf, len, sum))
 		return FALSE;
@@ -1270,7 +1270,7 @@ BOOL IsBufferInDB(const unsigned char* buf, const size_t len)
 
 BOOL IsFileInDB(const char* path)
 {
-	int i;
+	size_t i;
 	uint8_t sum[32];
 	if (!HashFile(CHECKSUM_SHA256, path, sum))
 		return FALSE;
